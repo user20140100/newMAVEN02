@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/update.css">
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <title>Document</title>
+</head>
+<script>
+    var i = 1
+
+    function add() {
+        var formHtml = '<div class="input-group">'
+            + '<span class="input-group-text">商品名称</span>'
+            + '<input type="text" class="form-control goods" aria-label="goods">'
+            + '<button class="btn btn-outline-danger" type="button" onclick="del(\'good' + i + '\')">删除商品</button>'
+            + '<button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#item' + i + '"'
+            + 'aria-expanded="false" aria-controls="item' + i + '">'
+            + '详细信息'
+            + '</button>'
+            + '</div>'
+            + '<div class="collapse" id="item' + i + '">'
+            + '<div class="input-group mt-3 mb-3">'
+            + '<span class="input-group-text">销售单号</span>'
+            + '<input type="text" class="form-control sname" aria-label="sname">'
+            + '</div>'
+            + '<div class="input-group mb-3">'
+            + '<span class="input-group-text">销售总量</span>'
+            + '<input type="number" class="form-control samount" aria-label="samount">'
+            + '<span class="input-group-text">销售总额</span>'
+            + '<input type="number" class="form-control ssum" aria-label="ssum">'
+            + '<span class="input-group-text">￥</span>'
+            + '<span class="input-group-text">0.00</span>'
+            + '</div>'
+            + '<div class="input-group mb-3">'
+            + '<span class="input-group-text">销售日期</span>'
+            + '<input type="date" class="form-control sdate" aria-label="sdate">'
+            + '</div>'
+            + '<div class="input-group mb-3">'
+            + '<span class="input-group-text">税收种类</span>'
+            + '<select class="form-select stype" aria-label="stype">'
+            + '<option value="1">增值税</option>'
+            + '<option value="2">营业税</option>'
+            + '<option value="3">资源税</option>'
+            + '<option value="4">企业所得税</option>'
+            + '<option value="5">消费税</option>'
+            + '<option value="6">关税</option>'
+            + '</select>'
+            + '</div>'
+            + '<div class="input-group mb-3">'
+            + '<span class="input-group-text">需缴纳税额</span>'
+            + '<input type="number" class="form-control ratesum" aria-label="ratesum">'
+            + '<span class="input-group-text">￥</span>'
+            + '<span class="input-group-text">0.00</span>'
+            + '</div>'
+            + '</div>'
+
+        var node = document.createElement("li")
+        node.classList.add("list-group-item")
+        node.id = "good" + i
+        node.innerHTML = formHtml
+        document.getElementById("goodList").appendChild(node)
+        i++
+    }
+
+    function del(id) {
+        document.getElementById(id).remove()
+    }
+
+    function submit() {
+        var goodsList = document.getElementsByClassName("goods")
+        var snameList = document.getElementsByClassName("sname")
+        var samountList = document.getElementsByClassName("samount")
+        var ssumList = document.getElementsByClassName("ssum")
+        var sdateList = document.getElementsByClassName("sdate")
+        var stypeList = document.getElementsByClassName("stype")
+        var ratesumList = document.getElementsByClassName("ratesum")
+        var goodsListObj = new Array()
+
+        for (var j = 0; j < goodsList.length; j++) {
+            var goodsObj = {
+                goods: goodsList[j].value,
+                sname: snameList[j].value,
+                samount: Number(samountList[j].value),
+                ssum: Number(ssumList[j].value),
+                sdate: sdateList[j].value,
+                stype: Number(stypeList[j].value),
+                ratesum: Number(ratesumList[j].value)
+            }
+            goodsListObj.push(goodsObj)
+        }
+
+        // if (name == "" || document.getElementById("ratesum").value == "" || sdate == "" || endDate == "") {
+        //     document.getElementById("alert").innerHTML = '<div class="alert alert-danger" role="alert">'
+        //         + '输入信息不能为空!'
+        //         + '</div>'
+        //     return
+        // }
+
+        var sdeclare = document.getElementById("sdeclare").value
+        var userid = Number(document.getElementById("userid").value)
+        var phonenum = Number(document.getElementById("phonenum").value)
+        var bank = document.getElementById("bank").value
+        var account = Number(document.getElementById("account").value)
+        var declaretime = document.getElementById("declaretime").value
+        var obj = {
+            sdeclare: sdeclare,
+            userid: userid,
+            phonenum: phonenum,
+            bank: bank,
+            account: account,
+            declaretime: declaretime
+        }
+        obj.shangpinList = goodsListObj
+        // records = obj
+
+        var xhr = new XMLHttpRequest()
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var json = JSON.parse(xhr.responseText)
+                if (json.code == 0) {
+                    document.getElementById("alert").innerHTML = '<div class="alert alert-danger" role="alert">'
+                        + json.msg
+                        + '</div>'
+                } else if (json.code == 1) {
+                    document.getElementById("alert").innerHTML = '<div class="alert alert-primary" role="alert">'
+                        + json.msg
+                        + '</div>'
+                }
+            }
+        }
+        xhr.open("POST", "/order/save", true)
+        xhr.setRequestHeader("Content-type", "application/json")
+        xhr.send(JSON.stringify(obj))
+    }
+</script>
+
+<body class="app-work">
+    <div class="card">
+        <div class="card-body">
+            <div id="alert">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">申报名称</span>
+                <input type="text" class="form-control" aria-label="sdeclare" id="sdeclare">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">纳税人识别号</span>
+                <input type="number" class="form-control" aria-label="userid" id="userid">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">电话号码</span>
+                <input type="number" class="form-control" aria-label="phonenum" id="phonenum">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">开户银行</span>
+                <input type="text" class="form-control" aria-label="bank" id="bank">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">开户账号</span>
+                <input type="number" class="form-control" aria-label="account" id="account">
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">申报时间</span>
+                <input type="date" class="form-control" aria-label="declaretime" id="declaretime">
+            </div>
+        </div>
+        <ul class="list-group list-group-flush" id="goodList">
+            <!-- <li class="list-group-item" id="good1">
+                <div class="input-group">
+                    <span class="input-group-text">商品名称</span>
+                    <input type="text" class="form-control goods" aria-label="goods">
+                    <button class="btn btn-outline-danger" type="button" onclick="del(good1)">删除商品</button>
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#item1"
+                        aria-expanded="false" aria-controls="item1">
+                        详细信息
+                    </button>
+                </div>
+                <div class="collapse" id="item1">
+                    <div class="input-group mt-3 mb-3">
+                        <span class="input-group-text">销售单号</span>
+                        <input type="text" class="form-control sname" aria-label="sname">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">销售总量</span>
+                        <input type="number" class="form-control samount" aria-label="samount">
+                        <span class="input-group-text">销售总额</span>
+                        <input type="number" class="form-control ssum" aria-label="ssum">
+                        <span class="input-group-text">￥</span>
+                        <span class="input-group-text">0.00</span>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">销售日期</span>
+                        <input type="date" class="form-control sdate" aria-label="sdate">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">税收种类</span>
+                        <select class="form-select stype" aria-label="stype">
+                            <option value="1">增值税</option>
+                            <option value="2">营业税</option>
+                            <option value="3">资源税</option>
+                            <option value="4">企业所得税</option>
+                            <option value="5">消费税</option>
+                            <option value="6">关税</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">需缴纳税额</span>
+                        <input type="number" class="form-control ratesum" aria-label="ratesum">
+                        <span class="input-group-text">￥</span>
+                        <span class="input-group-text">0.00</span>
+                    </div>
+                </div>
+            </li> -->
+        </ul>
+        <div class="card-body">
+            <button type="button" class="btn btn-primary" onclick="add()">添加商品</button>
+            <button type="submit" class="btn btn-primary" onclick="submit()">提交</button>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

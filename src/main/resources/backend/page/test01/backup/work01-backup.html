@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/update.css">
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <title>Document</title>
+</head>
+<script>
+    function submit() {
+        var name = document.getElementById("taxuser").value
+        var sum = Number(document.getElementById("ratesum").value)
+        var ratetype = document.getElementById("ratetype").value
+        var startDate = document.getElementById("date-start").value
+        var endDate = document.getElementById("date-end").value
+        if (ratetype == "1")
+            ratetype = 1
+        else
+            ratetype = 2
+        if (name == "" || document.getElementById("ratesum").value == "" || startDate == "" || endDate == "") {
+            document.getElementById("alert").innerHTML = '<div class="alert alert-danger" role="alert">'
+                + '输入信息不能为空!'
+                + '</div>'
+            return
+        }
+        var obj = { taxuser: name, ratesum: sum, ratetype: ratetype, ratestart: startDate, rateend: endDate }
+        var xhr = new XMLHttpRequest()
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var json = JSON.parse(xhr.responseText)
+                if (json.code == 0) {
+                    document.getElementById("alert").innerHTML = '<div class="alert alert-danger" role="alert">'
+                        + json.msg
+                        + '</div>'
+                } else if (json.code == 1) {
+                    document.getElementById("alert").innerHTML = '<div class="alert alert-primary" role="alert">'
+                        + json.msg
+                        + '</div>'
+                }
+            }
+        }
+        xhr.open("POST", "/order/save", true)
+        xhr.setRequestHeader("Content-type", "application/json")
+        xhr.send(JSON.stringify(obj))
+    }
+</script>
+
+<body class="app-work">
+    <div class="card">
+        <div class="card-body">
+            <div id="alert">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">税收对象</span>
+                <input type="text" class="form-control" aria-label="tax user" id="taxuser">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">开始日期</span>
+                </div>
+                <input type="date" aria-label="start date" class="form-control" id="date-start">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">结束日期</span>
+                </div>
+                <input type="date" aria-label="end date" class="form-control" id="date-end">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">税收种类</span>
+                <select id="ratetype" class="form-select" aria-label="ratetype">
+                    <option value="1">个人税务</option>
+                    <option value="2">组织税务</option>
+                </select>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">总税额</span>
+                <input type="number" class="form-control" aria-label="rmb sum" id="ratesum">
+                <span class="input-group-text">￥</span>
+                <span class="input-group-text">0.00</span>
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="submit()">提交</button>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

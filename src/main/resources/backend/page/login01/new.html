@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+
+<body>
+
+
+<script>
+    var obj = {}
+    var xhr = new XMLHttpRequest();
+    var obj1;
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            obj1 = JSON.parse(xhr.response)
+            // document.body.innerHTML(obj1.code)
+            console.log(obj1.data)
+        }
+    }
+    xhr.open("POST", "/shangpin/totalratesumbystype", true);
+    // xhr.open("GET", "/order/page1?current=1&pagesize=50&goods=testgoods002&stype=2&begin=2022-11-20 00:00:00&over=2022-11-24 23:59:59", true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(JSON.stringify(obj));
+</script>
+
+<!--<script>-->
+<!--    var obj = {}-->
+<!--    var xhr = new XMLHttpRequest();-->
+<!--    var obj1;-->
+<!--    xhr.onreadystatechange = function () {-->
+<!--        if (xhr.readyState == 4 && xhr.status == 200) {-->
+<!--            obj1 = JSON.parse(xhr.response)-->
+<!--            // document.body.innerHTML(obj1.code)-->
+<!--            console.log(obj1.data)-->
+<!--        }-->
+<!--    }-->
+<!--    xhr.open("GET", "/order/page2?current=1&pagesize=10&goods=&stype=2&begin=&over=", true);-->
+<!--    // xhr.open("GET", "/order/page1?current=1&pagesize=50&goods=testgoods002&stype=2&begin=2022-11-20 00:00:00&over=2022-11-24 23:59:59", true);-->
+<!--    xhr.setRequestHeader("Content-type", "application/json");-->
+<!--    xhr.send(JSON.stringify(obj));-->
+<!--</script>-->
+
+
+<!--<script>-->
+
+<!--    var obj = {id : 1,fapiaoren : "testren",fapiaotime : "2022-11-09",-->
+<!--    username : "test001",ratename : "testratename",countsum : 10,-->
+<!--    unitprice : 2.5,ratesum : 123.4,shangpinList : [{fid : 2,goods : "notebook",stype : "testsytpe1",ratesum : 20.5},-->
+<!--            {fid : 2,goods : "phone",stype : "testsytpe2",ratesum : 45.78},-->
+<!--            {fid : 2,goods : "dayinji",stype : "testsytpe3",ratesum : 65.26}]}-->
+<!--    var xhr = new XMLHttpRequest();-->
+<!--    var obj1;-->
+<!--    xhr.onreadystatechange = function () {-->
+<!--        if (xhr.readyState == 4 && xhr.status == 200) {-->
+<!--            obj1 = JSON.parse(xhr.response)-->
+<!--            // document.body.innerHTML(obj1.code)-->
+<!--            console.log(obj1.data)-->
+<!--        }-->
+<!--    }-->
+<!--    xhr.open("POST", "/fapiao/save", true);-->
+<!--    xhr.setRequestHeader("Content-type", "application/json");-->
+<!--    console.log(JSON.stringify(obj))-->
+<!--    const obj2 = JSON.stringify(obj);-->
+<!--    xhr.send(obj2);-->
+
+<!--</script>-->
+
+
+<!--<script>-->
+
+<!--    var obj = {}-->
+<!--    var xhr = new XMLHttpRequest();-->
+<!--    var obj1;-->
+<!--    xhr.onreadystatechange = function () {-->
+<!--        if (xhr.readyState == 4 && xhr.status == 200) {-->
+<!--            obj1 = JSON.parse(xhr.response)-->
+<!--            // document.body.innerHTML(obj1.code)-->
+<!--            console.log(obj1.data)-->
+<!--        }-->
+<!--    }-->
+<!--    xhr.open("GET", "/order/page?page=1&pagesize=2&name=user002", true);-->
+<!--    xhr.send()-->
+<!--    // xhr.setRequestHeader("Content-type", "application/json");-->
+<!--    // xhr.send(JSON.stringify(obj));-->
+
+<!--</script>-->
+
+
+<!--<script>-->
+
+<!--    var obj = {taxuser : "user005",ratestart : "2022-11-09",rateend : "2022-12-15",rateSum : 20.5,ratetype: 2}-->
+<!--    var xhr = new XMLHttpRequest();-->
+<!--    var obj1;-->
+<!--    xhr.onreadystatechange = function () {-->
+<!--        if (xhr.readyState == 4 && xhr.status == 200) {-->
+<!--            obj1 = JSON.parse(xhr.response)-->
+<!--            // document.body.innerHTML(obj1.code)-->
+<!--            console.log(obj1.data)-->
+<!--        }-->
+<!--    }-->
+<!--    xhr.open("POST", "/order/save", true);-->
+<!--    xhr.setRequestHeader("Content-type", "application/json");-->
+<!--    xhr.send(JSON.stringify(obj));-->
+
+<!--</script>-->
+
+
+<!--<script>-->
+<!--    var obj = {}-->
+<!--    var xhr = new XMLHttpRequest();-->
+<!--    var obj1;-->
+<!--    xhr.onreadystatechange = function () {-->
+<!--        if (xhr.readyState == 4 && xhr.status == 200) {-->
+<!--            obj1 = JSON.parse(xhr.response)-->
+<!--            // document.body.innerHTML(obj1.code)-->
+<!--            console.log(obj1.data)-->
+<!--        }-->
+<!--    }-->
+<!--    xhr.open("GET", "/order/{1}", true);-->
+<!--    xhr.setRequestHeader("Content-type", "application/json");-->
+<!--    xhr.send(JSON.stringify(obj));-->
+<!--</script>-->
+
+
+</body>
+
+</html>

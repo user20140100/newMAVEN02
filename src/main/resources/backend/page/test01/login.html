@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/update.css">
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+        function login() {
+            var usernameLogin = document.getElementById("username-login").value
+            var passwordLogin = document.getElementById("password-login").value
+            var obj = { username: usernameLogin, password: passwordLogin }
+            var xhr = new XMLHttpRequest()
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var json = JSON.parse(xhr.responseText)
+                    if (json.code == 0) {
+                        document.getElementById("alert").innerHTML = '<div class="alert alert-danger" role="alert">'
+                            + json.msg
+                            + '</div>'
+                    } else if (json.code == 1) {
+                        window.location.href = "main.html"
+                    }
+                }
+            }
+            xhr.open("POST", "/user/login", true)
+            xhr.setRequestHeader("Content-type", "application/json")
+            xhr.send(JSON.stringify(obj))
+        }
+    </script>
+    <title>登录</title>
+</head>
+
+<body id="welcome-bg">
+    <div id="welcome-box">
+        <div>
+            <img src="images/logo.png" alt="Logo">
+        </div>
+        <div class="mb-4">
+            <h1 id="welcome-message">欢迎使用智税云</h1>
+        </div>
+        <div>
+            <button type="button" class="btn btn-info mr-2" data-bs-toggle="modal" data-bs-target="#Login">登录</button>
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                data-bs-target="#Register">注册</button>
+            <div class="modal fade" id="Login" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">登录</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form>
+                            <div class="modal-body">
+                                <div id="alert">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">用户名:</span>
+                                    </div>
+                                    <input type="text" class="form-control" id="username-login"
+                                        aria-describedby="basic-addon3">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">密　码:</span>
+                                    </div>
+                                    <input type="password" class="form-control" id="password-login"
+                                        aria-describedby="basic-addon3">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-info" onclick="login()">登录</button>
+                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                                    data-bs-dismiss="modal" data-bs-target="#Register">注册</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="Register" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">注册</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="" method="post">
+                            <div class="modal-body">
+                                <div class="modal-body">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">用户名:</span>
+                                        </div>
+                                        <input type="text" class="form-control" id="username-register"
+                                            aria-describedby="basic-addon3">
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">密　码:</span>
+                                        </div>
+                                        <input type="password" class="form-control" id="password-register"
+                                            aria-describedby="basic-addon3">
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">确认密码:</span>
+                                        </div>
+                                        <input type="Password" class="form-control" id="confirmPassword"
+                                            aria-describedby="basic-addon3">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                                    data-bs-dismiss="modal" data-bs-target="#Login">登录</button>
+                                <button type="button" class="btn btn-info" onclick="register()">注册</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

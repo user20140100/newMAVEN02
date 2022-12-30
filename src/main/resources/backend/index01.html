@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>目录</title>
+</head>
+<body>
+
+
+
+<script src="plugins/vue/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="plugins/element-ui/index.js"></script>
+<!-- 引入axios -->
+<script src="plugins/axios/axios.min.js"></script>
+<script src="js/request.js"></script>
+<script src="./api/login.js"></script>
+
+
+
+<p>目录</p>
+
+<div class="dashboard-container" id="order-app" v-loading="loading">
+    <div class="container">
+        <!-- 搜索项 -->
+        <div class="tableBar">
+            <el-input v-model="input" placeholder="请输入订单号" style="width: 250px">
+                <i slot="prefix" class="el-input__icon el-icon-search" style="cursor: pointer" @click="init"></i>
+            </el-input>
+            <el-date-picker v-model="orderTime"
+                            clearable
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            type="datetimerange"
+                            placeholder="选择日期"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            :default-time="['00:00:00', '23:59:59']"
+                            style="width: 400px;margin-left: 20px;"
+            ></el-date-picker>
+            <el-button type="primary" class="search-btn" @click="init">查询</el-button>
+        </div>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el: '#order-app',
+        data() {
+            return {
+                input: '',
+                orderTime: '',
+                beginTime: '',
+                endTime: '',
+                counts: 0,
+                page: 1,
+                pageSize: 10,
+                tableData: [],
+                dialogVisible: false,
+                diaForm: {},
+                loading: false
+            }
+        },
+        watch: {
+            orderTime(val) {
+                if (val && val.length >= 2) {
+                    this.beginTime = val[0]
+                    this.endTime = val[1]
+                } else {
+                    this.beginTime = ''
+                    this.endTime = ''
+                }
+            }
+        },
+    })
+
+</script>
+
+</body>
+</html>

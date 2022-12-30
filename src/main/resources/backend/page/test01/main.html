@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html class="app-background-main" lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/update.css">
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body class="app-background-main">
+    <div class="app-container">
+        <nav class="app-navigation">
+            <div class="app-navigation-title">
+                <img src="images/logo.png" alt="logo" height="70" width="70">
+                <span>智税云</span>
+            </div>
+            <div class="navigation-item active" onclick="jump(0)">
+                <img src="images/link1.png" alt="" height="70px" width="70px">
+                <span>订单申报</span>
+            </div>
+            <div class="navigation-item" onclick="jump(1)">
+                <img src="images/link2.png" alt="" height="70px" width="70px">
+                <span>税收统计</span>
+            </div>
+            <div class="navigation-item" onclick="jump(2)">
+                <img src="images/link3.png" alt="" height="70px" width="70px">
+                <span>税收分析</span>
+            </div>
+        </nav>
+        <div class="app-content">
+            <div class="app-content-navigation">
+
+            </div>
+            <iframe id = "navigation-second" title="content" src="work01.html" frameborder="0"></iframe>
+        </div>
+    </div>
+</body>
+<script>
+    function jump(page) {
+        if (page == 0) {
+            document.getElementById("navigation-second").src = "work01.html"
+        } else if (page == 1) {
+            document.getElementById("navigation-second").src = "work04.html"
+        } else {
+            document.getElementById("navigation-second").src = "work03.html"
+        }
+        var navigationList = document.getElementsByClassName("navigation-item")
+        for (var i = 0; i < navigationList.length; i++) {
+            navigationList[i].classList.remove("active")
+        }
+        navigationList[page].classList.add("active")
+    }
+</script>
+
+</html>

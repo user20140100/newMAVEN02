@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/update.css">
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <title>Document</title>
+</head>
+<script>
+    function search() {
+        var xhr = new XMLHttpRequest()
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var json = JSON.parse(xhr.responseText)
+                if (json.code == 1) {
+                    var records = json.data.records
+                    for (var i = 0; i < records.length; i++) {
+                        var ratetype
+                        var ratetypePattern
+                        if (records[i].ratetype == 1) {
+                            ratetype = "个人税务"
+                            ratetypePattern = "primary"
+                        } else if (records[i].ratetype == 2) {
+                            ratetype = "组织税务"
+                            ratetypePattern = "info"
+                        }
+                        var orderstate
+                        var orderstatePatter
+                        if (records[i].orderstate == 1) {
+                            orderstate = "审核中"
+                            orderstatePatter = "warning"
+                        } else if (records[i].orderstate == 2) {
+                            orderstate = "已通过"
+                            orderstatePatter = "success"
+                        } else if (records[i].orderstate == -1) {
+                            orderstate = "未通过"
+                            orderstatePatter = "danger"
+                        }
+                        document.getElementById("content").innerHTML += '<div class="card border-primary mb-2">'
+                            + '<div class="card-body">'
+                            + '<div class="clearfix">'
+                            + '<h5 class="card-title float-start">' + records[i].taxuser + ' <span class="badge bg-' + ratetypePattern + '">' + ratetype + '</span></h5>'
+                            + '<span class="text-' + orderstatePatter + ' float-end">' + orderstate + '</span>'
+                            + '</div>'
+                            + '<div class="clearfix">'
+                            + '<p class="card-text float-start">编号: ' + records[i].orderid + '<br />总税额: ' + records[i].ratesum + '</p>'
+                            + '<button class="btn btn-primary float-end mt-2" type="button" data-bs-toggle="collapse"'
+                            + 'data-bs-target="#item' + i + '" aria-expanded="false" aria-controls="item' + i + '">'
+                            + '详细信息'
+                            + '</button>'
+                            + '</div>'
+                            + '<div class="collapse" id="item' + i + '">'
+                            + '<div class="card card-body">'
+                            + '<small class="text-muted">'
+                            + '<span>税收对象: ' + records[i].taxuser + '</span><br />'
+                            + '<span>订单编号: ' + records[i].orderid + '</span><br />'
+                            + '<span>提交人: ' + records[i].startuser + '</span><br />'
+                            + '<span>提交时间: ' + records[i].starttime + '</span><br />'
+                            + '<span>更新人: ' + records[i].updateuser + '</span><br />'
+                            + '<span>更新时间: ' + records[i].updatetime + '</span><br />'
+                            + '<span>审核结束时间: ' + records[i].endtime + '</span><br />'
+                            + '<span>税收开始时间: ' + records[i].ratestart + '</span><br />'
+                            + '<span>税收结束时间: ' + records[i].rateend + '</span><br />'
+                            + '<span>税率: ' + records[i].taxrate + '</span><br />'
+                            + '<span>税收种类: ' + ratetype + '</span>'
+                            + '</small>'
+                            + '<small class="text-muted">备注: </small>'
+                            + '<div class="card mt-1">'
+                            + '<div class="card-body">'
+                            + '<small class="text-muted">' + records[i].remarks + '</small>'
+                            + '</div>'
+                            + '</div>'
+                            + '</div>'
+                            + '</div>'
+                            + '</div>'
+                            + '</div>'
+                    }
+                } else if (json.code == 0) {
+                    document.getElementById("content").innerHTML = '<div id="alert">'
+                        + '<div class="alert alert-info" role="alert">'
+                        + '未查询到任何记录'
+                        + '</div>'
+                        + '</div>'
+                }
+            }
+        }
+        var uri = "/order/page?page=1&pagesize=50&selecttype=2"
+        var startDate = document.getElementById("date-start").value
+        var endDate = document.getElementById("date-end").value
+        if (startDate != "")
+            uri += "&begin=" + startDate + " 00:00:00"
+        if (endDate != "")
+            uri += "&over=" + endDate + " 23:59:59"
+        xhr.open("GET", uri, true)
+        xhr.send()
+    }
+
+    search()
+</script>
+
+<body class="app-work">
+    <div class="card">
+        <div class="card-header">申请记录</div>
+        <div class="card-body">
+            <div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">开始日期</span>
+                    </div>
+                    <input type="date" aria-label="start date" class="form-control" id="date-start" onchange="search()">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">结束日期</span>
+                    </div>
+                    <input type="date" aria-label="end date" class="form-control" id="date-end" onchange="search()">
+                </div>
+            </div>
+            <div id="content">
+                <!-- <div id="alert">
+                    <div class="alert alert-info" role="alert">
+                        未查询到任何记录
+                    </div>
+                </div>
+                <div class="card border-primary mb-2">
+                    <div class="card-body">
+                        <div class="clearfix">
+                            <h5 class="card-title float-start">名字 <span class="badge bg-primary">个人税务</span></h5>
+                            <span class="text-success float-end">已通过</span>
+                        </div>
+                        <div class="clearfix">
+                            <p class="card-text float-start">编号: 1<br />总税额: 10</p>
+                            <button class="btn btn-primary float-end mt-2" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#item01" aria-expanded="false" aria-controls="item01">
+                                详细信息
+                            </button>
+                        </div>
+                        <div class="collapse" id="item01">
+                            <div class="card card-body">
+                                <small class="text-muted">
+                                    <span>税收对象: X</span><br />
+                                    <span>订单编号: X</span><br />
+                                    <span>提交人: X</span><br />
+                                    <span>提交时间: X</span><br />
+                                    <span>更新人: X</span><br />
+                                    <span>更新时间: X</span><br />
+                                    <span>审核结束时间: X</span><br />
+                                    <span>税收开始时间: X</span><br />
+                                    <span>税收结束时间: X</span><br />
+                                    <span>税率: X</span><br />
+                                    <span>税收种类: X</span>
+                                </small>
+                                <small class="text-muted">备注: </small>
+                                <div class="card mt-1">
+                                    <div class="card-body">
+                                        <small class="text-muted">XXXX</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> --> 
+            </div>
+            
+        </div>
+    </div>
+
+
+</body>
+
+</html>

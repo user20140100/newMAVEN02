@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/update.css">
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body class="app-work flex-container">
+    <div class="card m-4">
+        <div class="card-body">
+            <div id="chart1"></div>
+        </div>
+    </div>
+
+    </div>
+
+    <div class="card m-4">
+        <div class="card-body">
+            <div id="chart2"></div>
+        </div>
+    </div>
+
+    <div class="card m-4">
+        <div class="card-body">
+            <div id="chart3"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var xhr = new XMLHttpRequest()
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var json = JSON.parse(xhr.responseText)
+                // 基于准备好的dom，初始化echarts实例
+                var chart1 = echarts.init(document.getElementById('chart1'));
+                var chart2 = echarts.init(document.getElementById('chart2'));
+
+                // 指定图表的配置项和数据
+                var option1 = {
+                    tooltip: {},
+                    legend: {
+                        data: ['税收金额']
+                    },
+                    xAxis: {
+                        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                    },
+                    yAxis: {},
+                    series: [
+                        {
+                            name: '税收金额',
+                            type: 'line',
+                            data: json.data.countbylist
+                        }
+                    ]
+                };
+
+                var option2 = {
+                    legend: {
+                        orient: 'vertical',
+                        x: 'left',
+                        data: ['增值税', '营业税', '资源税', '企业所得税', '消费税', '关税']
+                    },
+                    series: [
+                        {
+                            type: 'pie',
+                            radius: ['50%', '70%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                show: false,
+                                position: 'center'
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: '30',
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            data: [
+                                { value: 335, name: '增值税' },
+                                { value: 310, name: '营业税' },
+                                { value: 234, name: '资源税' },
+                                { value: 135, name: '企业所得税' },
+                                { value: 1548, name: '消费税' },
+                                { value: 123, name: '关税' }
+                            ]
+                        }
+                    ]
+                };
+                chart1.setOption(option1);
+                chart2.setOption(option2);
+            }
+        }
+        xhr.open("POST", "/shangpin/ratesumbymounth", true)
+        xhr.setRequestHeader("Content-type", "application/json")
+        xhr.send()
+
+        var xhr1 = new XMLHttpRequest()
+        xhr1.onreadystatechange = function () {
+            if (xhr1.readyState == 4 && xhr1.status == 200) {
+                var json = JSON.parse(xhr1.responseText)
+
+                var chart3 = echarts.init(document.getElementById('chart3'));
+                var option3 = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+                    legend: {},
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '增值税',
+                            type: 'bar',
+                            stack: 'rate',
+                            emphasis: {
+                                focus: 'series'
+                            },
+                            data: json.data.rate1
+                        },
+                        {
+                            name: '营业税',
+                            type: 'bar',
+                            stack: 'rate',
+                            emphasis: {
+                                focus: 'series'
+                            },
+                            data: json.data.rate2
+                        },
+                        {
+                            name: '资源税',
+                            type: 'bar',
+                            stack: 'rate',
+                            emphasis: {
+                                focus: 'series'
+                            },
+                            data: json.data.rate3
+                        },
+                        {
+                            name: '企业所得税',
+                            type: 'bar',
+                            stack: 'rate',
+                            emphasis: {
+                                focus: 'series'
+                            },
+                            data: json.data.rate4
+                        },
+                        {
+                            name: '消费税',
+                            type: 'bar',
+                            stack: 'rate',
+                            emphasis: {
+                                focus: 'series'
+                            },
+                            data: json.data.rate5
+                        },
+                        {
+                            name: '关税',
+                            type: 'bar',
+                            stack: 'rate',
+                            emphasis: {
+                                focus: 'series'
+                            },
+                            data: json.data.rate6
+                        }
+                    ]
+                };
+                chart3.setOption(option3);
+            }
+        }
+        xhr1.open("POST", "/shangpin/totalmoneybyrate", true)
+        xhr1.setRequestHeader("Content-type", "application/json")
+        xhr1.send()
+
+        var xhr2 = new XMLHttpRequest()
+        xhr2.onreadystatechange = function () {
+            if (xhr2.readyState == 4 && xhr2.status == 200) {
+                var json = JSON.parse(xhr2.responseText)
+                // 基于准备好的dom，初始化echarts实例
+                var chart2 = echarts.init(document.getElementById('chart2'));
+
+                // 指定图表的配置项和数据
+                var option2 = {
+                    legend: {
+                        orient: 'vertical',
+                        x: 'left',
+                        data: ['增值税', '营业税', '资源税', '企业所得税', '消费税', '关税']
+                    },
+                    series: [
+                        {
+                            type: 'pie',
+                            radius: ['50%', '70%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                show: false,
+                                position: 'center'
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true,
+                                    fontSize: '30',
+                                    fontWeight: 'bold'
+                                }
+                            },
+                            data: [
+                                { value: json.data.pielist[0], name: '增值税' },
+                                { value: json.data.pielist[1], name: '营业税' },
+                                { value: json.data.pielist[2], name: '资源税' },
+                                { value: json.data.pielist[3], name: '企业所得税' },
+                                { value: json.data.pielist[4], name: '消费税' },
+                                { value: json.data.pielist[5], name: '关税' }
+                            ]
+                        }
+                    ]
+                };
+                chart2.setOption(option2);
+            }
+        }
+        xhr2.open("POST", "/shangpin/totalratesumbystype", true)
+        xhr2.setRequestHeader("Content-type", "application/json")
+        xhr2.send()
+    </script>
+</body>
+
+</html>

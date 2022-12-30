@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/update.css">
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <title>Document</title>
+</head>
+<script>
+  function search() {
+    var xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        document.getElementById("content").innerHTML = ""
+        var json = JSON.parse(xhr.responseText)
+        if (json.code == 1) {
+           var records = json.data.records
+          for (let i = 0; i < records.length; i++) {
+            var orderstate = "已通过"
+            var orderstatePatter = "success"
+            // if (records[i].orderstate == 1) {
+            //   orderstate = "审核中"
+            //   orderstatePatter = "warning"
+            // } else if (records[i].orderstate === 2) {
+            //   orderstate = "已通过"
+            //   orderstatePatter = "success"
+            // } else if (records[i].orderstate == -1) {
+            //   orderstate = "未通过"
+            //   orderstatePatter = "danger"
+            // }
+            var remarks = records[i].remarks
+            if (remarks == null)
+              remarks = "无"
+            var contenthtml = '<div class="card border-primary mb-2">'
+                    + '<div class="card-body">'
+                    + '<div class="clearfix">'
+                    + '<h5 class="card-title float-start">'+records[i].sdeclare+'</h5>'
+                    + '<span class="text-' + orderstatePatter + ' float-end">' + orderstate + '</span>'
+                    + '</div>'
+                    + '<div class="clearfix">'
+                    + '<p class="card-text float-start">纳税人识别号号: ' + records[i].userid + '<br />申报时间: ' + records[i].declaretime + '</p>'
+                    + '<button class="btn btn-primary float-end mt-2" type="button" data-bs-toggle="collapse"'
+                    + 'data-bs-target="#item' + i + '" aria-expanded="false" aria-controls="item' + i + '">'
+                    + '详细信息'
+                    + '</button>'
+                    + '</div>'
+                    + '<div class="collapse" id="item' + i + '">'
+                    + '<div class="card card-body">'
+                    + '<small class="text-muted">'
+                    + '<span>电话: ' + records[i].phonenum + '</span><br />'
+                    + '<span>开户银行: ' + records[i].bank + '</span><br />'
+                    + '<span>开户账号: ' + records[i].account + '</span><br />'
+                    + '</small>'
+                    + '<small class="text-muted">备注: </small>'
+                    + '<div class="card mt-1">'
+                    + '<div class="card-body">'
+                    + '<table className="table" class="table table-bordered">'
+                    + '<thead>'
+                    + '<tr>'
+                    + '<th scope="col">商品条数</th>'
+                    + '<th scope="col">商品名称</th>'
+                    + '<th scope="col">销售单号</th>'
+                    + '<th scope="col">销售总量</th>'
+                    + '<th scope="col">销售总额</th>'
+                    + '<th scope="col">销售日期</th>'
+                    + '<th scope="col">税收种类</th>'
+                    + '<th scope="col">需缴纳税额</th>'
+                    + '</tr>'
+                    + '</thead>'
+                    + '<tbody>'
+            console.log(contenthtml)
+            var slist = records[i].shangpinList
+            for (let j = 0; j < slist.length; j++) {
+              var temp = j+1
+              var stypePattern = "primary"
+              var stypeStr = "增值税"
+              if (slist[j].stype === 1) {
+                stypeStr = "增值税"
+                stypePattern = "primary"
+              } else if (slist[j].stype === 2) {
+                stypeStr = "营业税"
+                stypePattern = "secondary"
+              } else if (slist[j].stype === 3) {
+                stypeStr = "资源税"
+                stypePattern = "success"
+              } else if (slist[j].stype === 4) {
+                stypeStr = "企业所得税"
+                stypePattern = "warning"
+              } else if (slist[j].stype === 5) {
+                stypeStr = "消费税"
+                stypePattern = "info"
+              } else if (slist[j].stype === 6) {
+                stypeStr = "关税"
+                stypePattern = "dark"
+              }
+              contenthtml +=
+                      '<tr>'
+                      + '<th scope="row">'+temp+'</th>'
+                      + '<td>'+slist[j].goods+'</td>'
+                      + '<td>'+slist[j].sname+'</td>'
+                      + '<td>'+slist[j].samount+'</td>'
+                      + '<td>'+slist[j].ssum+'</td>'
+                      + '<td>'+slist[j].sdate+'</td>'
+                      + '<td>'+stypeStr+'</td>'
+                      + '<td>'+slist[j].ratesum+'</td>'
+                      + '</tr>'
+            }
+            contenthtml +=
+                    '</tbody>'
+                    + '</table>'
+                    + '</div>'
+                    + '</div>'
+                    + '</div>'
+                    + '</div>'
+                    + '</div>'
+                    + '</div>'
+            console.log(contenthtml)
+            document.getElementById("content").innerHTML += contenthtml
+          }
+        } else if (json.code == 0) {
+          document.getElementById("content").innerHTML = '<div id="alert">'
+                  + '<div class="alert alert-info" role="alert">'
+                  + '未查询到任何记录'
+                  + '</div>'
+                  + '</div>'
+        }
+      }
+    }
+    var uri = "/order/page2?current=1&pagesize=50"
+    var goods = document.getElementById("goods").value
+    var stype = document.getElementById("stype").value
+    var startDate = document.getElementById("startDate").value
+    var endDate = document.getElementById("endDate").value
+    // if (goods != "")
+    uri += "&goods=" + goods
+    // if (stype != "")
+    uri += "&stype=" + stype
+    if (startDate != "")
+      uri += "&begin=" + startDate + " 00:00:00"
+    else
+      uri += "&begin="
+    if (endDate != "")
+      uri += "&over=" + endDate + " 23:59:59"
+    else
+      uri += "&over="
+    xhr.open("GET", uri, true)
+    xhr.send()
+  }
+
+  search()
+</script>
+
+<body class="app-work">
+<div class="card">
+  <div class="card-header">历史数据</div>
+  <div class="card-body">
+    <div>
+      <div class="input-group mb-3">
+        <span class="input-group-text">商品名称</span>
+        <input type="text" class="form-control" aria-label="goods" id="goods">
+        <span class="input-group-text">税收种类</span>
+        <select id="stype" class="form-select" aria-label="stype">
+          <option value="0">全部</option>
+          <option value="1">增值税</option>
+          <option value="2">营业税</option>
+          <option value="3">资源税</option>
+          <option value="4">企业所得税</option>
+          <option value="5">消费税</option>
+          <option value="6">关税</option>
+        </select>
+        <span class="input-group-text">开始日期</span>
+        <input type="date" aria-label="startDate" class="form-control" id="startDate">
+        <span class="input-group-text">结束日期</span>
+        <input type="date" aria-label="endDate" class="form-control" id="endDate">
+        <button class="btn btn-outline-success" type="submit" onclick="search()">查询</button>
+      </div>
+    </div>
+    <div id="content">
+      <!-- <div id="alert">
+          <div class="alert alert-info" role="alert">
+              未查询到任何记录
+          </div>
+      </div>
+      <div class="card border-primary mb-2">
+          <div class="card-body">
+              <div class="clearfix">
+                  <h5 class="card-title float-start">名字 <span class="badge bg-primary">个人税务</span></h5>
+                  <span class="text-success float-end">已通过</span>
+              </div>
+              <div class="clearfix">
+                  <p class="card-text float-start">编号: 1<br />总税额: 10</p>
+                  <button class="btn btn-primary float-end mt-2" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#item01" aria-expanded="false" aria-controls="item01">
+                      详细信息
+                  </button>
+              </div>
+              <div class="collapse" id="item01">
+                  <div class="card card-body">
+                      <small class="text-muted">
+                          <span>税收对象: X</span><br />
+                          <span>订单编号: X</span><br />
+                          <span>提交人: X</span><br />
+                          <span>提交时间: X</span><br />
+                          <span>更新人: X</span><br />
+                          <span>更新时间: X</span><br />
+                          <span>审核结束时间: X</span><br />
+                          <span>税收开始时间: X</span><br />
+                          <span>税收结束时间: X</span><br />
+                          <span>税率: X</span><br />
+                          <span>税收种类: X</span>
+                      </small>
+                      <small class="text-muted">备注: </small>
+                      <div class="card mt-1">
+                          <div class="card-body">
+                              <small class="text-muted">XXXX</small>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div> -->
+    </div>
+    <nav aria-label="pageNavigation">
+      <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item disabled">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+
+</body>
+
+</html>
