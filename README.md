@@ -1,57 +1,39 @@
-<h1 id="h1-">h1 标题</h1>
-<h2 id="h2-">h2 标题</h2>
-<h3 id="h3-">h3 标题</h3>
-<h2 id="-">水平线</h2>
+<h1 id="-">智税云</h1>
 <hr>
-<h2 id="-">文本样式</h2>
-<p><strong>This is bold text</strong></p>
-<p><strong>This is bold text</strong></p>
-<p><em>This is italic text</em></p>
-<p><em>This is italic text</em></p>
-<p><del>Strikethrough</del></p>
-<h2 id="-">列表</h2>
-<p>无序</p>
-<ul>
-<li>Create a list by starting a line with <code>+</code>, <code>-</code>, or <code>*</code></li>
-<li>Sub-lists are made by indenting 2 spaces:<ul>
-<li>Marker character change forces new list start:<ul>
-<li>Ac tristique libero volutpat at</li>
-<li>Facilisis in pretium nisl aliquet</li>
-<li>Nulla volutpat aliquam velit</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Very easy!</li>
-</ul>
-<p>有序</p>
-<ol>
-<li>Lorem ipsum dolor sit amet</li>
-<li>Consectetur adipiscing elit</li>
-<li>Integer molestie lorem at massa</li>
-</ol>
-<ol>
-<li>You can use sequential numbers...</li>
-<li>...or keep all the numbers as <code>1.</code></li>
-</ol>
-<p>Start numbering with offset:</p>
-<ol>
-<li>foo</li>
-<li>bar</li>
-</ol>
-<h2 id="-">代码</h2>
-<p>Inline <code>code</code></p>
-<p>Indented code</p>
-<pre><code>// Some comments
-line 1 of code
-line 2 of code
-line 3 of code
-</code></pre><p>Block code &quot;fences&quot;</p>
-<pre><code>Sample text here...
-</code></pre><p>Syntax highlighting</p>
-<pre><code class="lang-js">var foo = function (bar) {
-  return bar++;
-};
-
-console.log(foo(5));
-</code></pre>
+<p><strong>功能描述</strong></p>
+<p><em>登录注册功能</em></p>
+<p>输入已经注册好的账号与密码，可以进入智税云主页面</p>
+<p><em>订单申报</em></p>
+<p>填写申报名称、纳税人识别号、电话号码、开户银行、开户账号以及申报时间，即开一张税务订单。
+点击添加商品，输入销售单号、销售总量、销售总额等数据为税务订单提供具体数据，选择税收种类与需缴纳的税额作为税收订单的主要统计数据。
+输入数据后点击提交，页面顶端显示成功则为成功。</p>
+<p><em>税收统计</em></p>
+<p>择商品名称、税收种类、开始日期和结束日期，
+点击搜索显示订单列表，点击详细信息，显示订单下每件商品的详细信息</p>
+<p><em>税务分析</em></p>
+<p>三张可视化图表，分别是每月销售金额折线图、所有税收额占比环形图以及每月总体税收占比柱状图，三张图表都是后台请求数据后返回显示。</p>
+<p><strong>开发环境</strong>
+项目结构：MAVEN
+后端框架：springboot
+前端框架：bootstrap
+数据库查询框架：mybatisplus
+数据库：mysql
+服务器：tomcat</p>
+<p><strong>项目结构简介</strong>
+java/com.origin下为后端代码
+common为工具类
+config为配置类
+controller为控制类
+entity为实体类
+filter为过滤器类
+mapper和service为数据库查询相关类
+page/test01下为前端代码
+css为文本样式
+images为图片信息
+js为相关js代码
+html为展示的页面
+<strong>作者列表</strong>
+后端开发：杨宇涵
+前端开发：赵宏顺
+项目经理：王业翔
+产品经理：罗浩旗</p>
